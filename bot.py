@@ -1,11 +1,14 @@
 import telebot
 import requests
 import psycopg2
+import os
 from datetime import datetime
+from dotenv import load_dotenv
 
 
-bot = telebot.TeleBot('')
-api_key = ""
+load_dotenv()
+bot = telebot.TeleBot(os.getenv("BOT_KEY"))
+api_key = os.getenv("API_KEY")
 
 def emojy(weather):
     if weather=="Thunderstorm":
@@ -56,12 +59,11 @@ def start(message):
     if message.from_user.last_name:
         lname = message.from_user.last_name
 
-    # to ENV
     conn = psycopg2.connect(
-        dbname="",
-        user="",
-        password="",
-        host=""
+        dbname = os.getenv("DBNAME"),
+        user = os.getenv("DBUSER"),
+        password = os.getenv("DBPASS"),
+        host = os.getenv("DBHOST")
     )
     cursor = conn.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS users (id BIGINT PRIMARY KEY, username VARCHAR(50) NOT NULL, name VARCHAR(80) NOT NULL)")
